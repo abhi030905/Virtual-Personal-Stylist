@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Personal Stylist</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        body {
+            background-color: #7eb4ff; 
+            background-image: url("");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            color: #333;
+            line-height: 1.6;
+            position: relative;
+        } 
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4); 
+            z-index: 1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .site-title-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+            margin-bottom: 40px;
+        }
+
+        .site-logo {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .site-title {
+            font-size: 2.5em;
+            font-weight: 600;
+            color: #fff; 
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .wardrobe-section {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            transition: transform 0.3s ease;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .wardrobe-section:hover {
+            transform: translateY(-5px);
+        }
+
+        .wardrobe-section h2 {
+            font-size: 1.5em;
+            font-weight: 500;
+            color: #1a1a1a;
+            margin-bottom: 10px;
+        }
+
+        .wardrobe-section p {
+            font-size: 1em;
+            font-weight: 400;
+            color: #666;
+        }
+
+        /* Upload section */
+        .upload-section {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            transition: transform 0.3s ease;
+        }
+
+        .upload-section:hover {
+            transform: translateY(-5px);
+        }
+
+        .upload-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .upload-column {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .upload-column h3 {
+            font-size: 1.3em;
+            font-weight: 500;
+            color: #1a1a1a;
+            margin-bottom: 10px;
+        }
+
+        .file-input {
+            border: 2px dashed #40c4ff;
+            padding: 30px;
+            text-align: center;
+            border-radius: 10px;
+            background-color: #f9fdff;
+            transition: background-color 0.3s ease;
+        }
+
+        .file-input:hover {
+            background-color: #e6f7ff;
+        }
+
+        .file-input input {
+            display: none;
+        }
+
+        .file-input label {
+            cursor: pointer;
+            display: block;
+            padding: 12px;
+            background-color: #40c4ff;
+            color: #fff;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+
+        .file-input label:hover {
+            background-color: #0288d1;
+        }
+
+        .preview-container {
+            margin-top: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .preview-container img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .occasion-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .occasion-select {
+            padding: 12px;
+            width: 220px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            margin-right: 15px;
+            background-color: #fff;
+        }
+
+        .occasion-select:focus {
+            outline: none;
+            border-color: #40c4ff;
+            box-shadow: 0 0 5px rgba(64, 196, 255, 0.3);
+        }
+
+        .get-suggestion-btn {
+            padding: 12px 25px;
+            background-color: #40c4ff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .get-suggestion-btn:hover {
+            background-color: #0288d1;
+        }
+
+        /* Suggestion section */
+        .suggestion-section {
+            background-color: #fff;
+            padding: 50px;
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .suggestion-section:hover {
+            transform: translateY(-5px);
+        }
+
+        .outfit-suggestions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* 2x2 grid for 4 pairs */
+            gap: 30px;
+        }
+
+        .suggestion-pair {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            border: 2px dashed #40c4ff;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #f9fdff;
+        }
+
+        .suggestion-slot {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .suggestion-slot h3 {
+            font-size: 1.1em;
+            font-weight: 500;
+            color: #1a1a1a;
+            margin-bottom: 10px;
+        }
+
+        .suggestion-slot img {
+            max-width: 100%;
+            max-height: 150px;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .suggestion-message {
+            font-size: 12px;
+            color: #666;
+            margin-top: 8px;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.6);
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 800px;
+            position: relative;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .close-btn {
+            color: #666;
+            float: right;
+            font-size: 32px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: #ff4d4f;
+        }
+
+        .wardrobe-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .wardrobe-item {
+            border: 1px solid #e0e0e0;
+            padding: 15px;
+            text-align: center;
+            border-radius: 10px;
+            background-color: #f9fdff;
+            transition: transform 0.3s ease;
+        }
+
+        .wardrobe-item:hover {
+            transform: scale(1.05);
+        }
+
+        .wardrobe-item img {
+            max-width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .wardrobe-item p {
+            margin-top: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .upload-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .outfit-suggestions {
+                grid-template-columns: 1fr; /* Stack pairs vertically on small screens */
+            }
+
+            .occasion-container {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+                align-items: center;
+            }
+
+            .occasion-select {
+                margin-right: 0;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="site-title-container">
+            <h1 class="site-title">Virtual Personal Stylist<colo/h1>
+        </div>
+
+        <div class="wardrobe-section" onclick="openWardrobe()">
+            <h2>Wardrobe</h2>
+            <p>View and manage your uploaded clothing items</p>
+        </div>
+
+        <div class="upload-section">
+            <h2>Upload Your Clothes</h2>
+            <div class="upload-grid">
+                <div class="upload-column">
+                    <h3>Shirts</h3>
+                    <div class="file-input">
+                        <input type="file" id="shirtUpload" accept="image/*" multiple onchange="previewImages('shirtUpload', 'shirtPreview', 'shirt')">
+                        <label for="shirtUpload">Select Shirt Images</label>
+                    </div>
+                    <div id="shirtPreview" class="preview-container"></div>
+                </div>
+                <div class="upload-column">
+                    <h3>Pants</h3>
+                    <div class="file-input">
+                        <input type="file" id="pantsUpload" accept="image/*" multiple onchange="previewImages('pantsUpload', 'pantsPreview', 'pants')">
+                        <label for="pantsUpload">Select Pants Images</label>
+                    </div>
+                    <div id="pantsPreview" class="preview-container"></div>
+                </div>
+            </div>
+            <div class="occasion-container">
+                <select id="occasionSelect" class="occasion-select">
+                    <option value="">Select Occasion</option>
+                    <option value="casual">Casual</option>
+                    <option value="formal">Formal</option>
+                    <option value="party">Party</option>
+                </select>
+                <button class="get-suggestion-btn" onclick="getOutfitSuggestions()">Get Outfit Suggestions</button>
+            </div>
+        </div>
+
+        <div class="suggestion-section">
+            <h2>Outfit Suggestions</h2>
+            <div class="outfit-suggestions" id="outfitSuggestions">
+                <!-- First Pair -->
+                <div class="suggestion-pair" data-pair="1">
+                    <div class="suggestion-slot">
+                        <h3>Suggested Shirt 1</h3>
+                        <img src="https://via.placeholder.com/300x300?text=No+Shirt" alt="Suggested Shirt 1" id="suggestedShirt1">
+                        <p class="suggestion-message" id="shirtMessage1"></p>
+                    </div>
+                    <div class="suggestion-slot">
+                        <h3>Suggested Pants 1</h3>
+                        <img src="https://via.placeholder.com/300x300?text=No+Pants" alt="Suggested Pants 1" id="suggestedPants1">
+                        <p class="suggestion-message" id="pantsMessage1"></p>
+                    </div>
+                </div>
+                <!-- Second Pair -->
+                <div class="suggestion-pair" data-pair="2">
+                    <div class="suggestion-slot">
+                        <h3>Suggested Shirt 2</h3>
+                        <img src="https://via.placeholder.com/300x300?text=No+Shirt" alt="Suggested Shirt 2" id="suggestedShirt2">
+                        <p class="suggestion-message" id="shirtMessage2"></p>
+                    </div>
+                    <div class="suggestion-slot">
+                        <h3>Suggested Pants 2</h3>
+                        <img src="https://via.placeholder.com/300x300?text=No+Pants" alt="Suggested Pants 2" id="suggestedPants2">
+                        <p class="suggestion-message" id="pantsMessage2"></p>
+                    </div>
+                </div>
+             
+                <div class="suggestion-pair" data-pair="3">
+                    <div class="suggestion-slot">
+                        <h3>Suggested Shirt 3</h3>
+                        <img src="https://via.placeholder.com/300x300?text=No+Shirt" alt="Suggested Shirt 3" id="suggestedShirt3">
+                        <p class="suggestion-message" id="shirtMessage3"></p>
+                    </div>
+                    <div class="suggestion-slot">
+                        <h3>Suggested Pants 3</h3>
+                        <img src="https://via.placeholder.com/300x300?text=No+Pants" alt="Suggested Pants 3" id="suggestedPants3">
+                        <p class="suggestion-message" id="pantsMessage3"></p>
+                    </div>
+                </div>
+                
+                <div class="suggestion-pair" data-pair="4">
+                    <div class="suggestion-slot">
+                        <h3>Suggested Shirt 4</h3>
+                        <img src="https://via.placeholder.com/300x300?text=No+Shirt" alt="Suggested Shirt 4" id="suggestedShirt4">
+                        <p class="suggestion-message" id="shirtMessage4"></p>
+                    </div>
+                    <div class="suggestion-slot">
+                        <h3>Suggested Pants 4</h3>
+                        <img src="https://via.placeholder.com/300x300?text=No+Pants" alt="Suggested Pants 4" id="suggestedPants4">
+                        <p class="suggestion-message" id="pantsMessage4"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Wardrobe Modal -->
+    <div id="wardrobeModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeWardrobe()">×</span>
+            <h2>My Wardrobe</h2>
+            <div id="wardrobeGrid" class="wardrobe-grid">
+                <!-- Wardrobe items will be displayed here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function previewImages(inputId, previewId, type) {
+            const input = document.getElementById(inputId);
+            const previewContainer = document.getElementById(previewId);
+            previewContainer.innerHTML = '';
+
+            const files = input.files;
+            if (files.length === 0) {
+                alert('Please select at least one image to upload.');
+                return;
+            }
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const reader = new FileReader();
+                reader.onload = async function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    previewContainer.appendChild(img);
+    
+                    const formData = new FormData();
+                    formData.append('type', type);
+                    formData.append('category', 'general');
+                    formData.append('image', file);
+                    console.log('Uploading item:', { type });
+
+                    try {
+                        const response = await fetch('http://localhost:5000/api/upload', {
+                            method: 'POST',
+                            body: formData
+                        });
+                        const result = await response.json();
+                        if (!response.ok) {
+                            throw new Error(result.message || 'Upload failed');
+                        }
+                        console.log('Upload successful:', result);
+                    } catch (error) {
+                        console.error('Upload error:', error);
+                        alert('Error uploading item: ' + error.message);
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Get outfit suggestions from the back-end (4 pairs)
+        async function getOutfitSuggestions() {
+            const occasion = document.getElementById('occasionSelect').value;
+
+            // Reset all placeholders for 4 pairs
+            for (let i = 1; i <= 4; i++) {
+                document.getElementById(`suggestedShirt${i}`).src = 'https://via.placeholder.com/300x300?text=No+Shirt';
+                document.getElementById(`suggestedPants${i}`).src = 'https://via.placeholder.com/300x300?text=No+Pants';
+                document.getElementById(`shirtMessage${i}`).textContent = '';
+                document.getElementById(`pantsMessage${i}`).textContent = '';
+            }
+
+            // Check for occasion
+            if (!occasion) {
+                alert('Please select an occasion.');
+                return;
+            }
+
+            try {
+                const response = await fetch(`http://localhost:5000/api/suggest-outfit?occasion=${occasion}`);
+                const result = await response.json();
+                if (!response.ok) {
+                    throw new Error(result.message || 'Failed to get outfit suggestions');
+                }
+
+                // Check if suggestions are available
+                const suggestions = result.suggestions || [];
+                if (suggestions.length === 0) {
+                    alert(result.message || 'No suggestions available.');
+                    return;
+                }
+
+                // Update the placeholders with the suggestions (up to 4 pairs)
+                suggestions.slice(0, 4).forEach((suggestion, index) => {
+                    const pairIndex = index + 1;
+                    const shirtImg = document.getElementById(`suggestedShirt${pairIndex}`);
+                    const pantsImg = document.getElementById(`suggestedPants${pairIndex}`);
+                    const shirtMessage = document.getElementById(`shirtMessage${pairIndex}`);
+                    const pantsMessage = document.getElementById(`pantsMessage${pairIndex}`);
+
+                    if (suggestion.shirt) {
+                        shirtImg.src = suggestion.shirt.image;
+                    }
+                    if (suggestion.pants) {
+                        pantsImg.src = suggestion.pants.image;
+                    }
+                    if (suggestion.message) {
+                        if (suggestion.message.includes('shirt')) {
+                            shirtMessage.textContent = suggestion.message.split('. ').filter(msg => msg.includes('shirt'))[0] + '.';
+                        }
+                        if (suggestion.message.includes('pants')) {
+                            pantsMessage.textContent = suggestion.message.split('. ').filter(msg => msg.includes('pants'))[0] + '.';
+                        }
+                        if (!suggestion.message.includes('shirt') && !suggestion.message.includes('pants')) {
+                            shirtMessage.textContent = suggestion.message;
+                        }
+                    }
+                });
+
+                // Display any additional message (e.g., "Only 3 pairs available")
+                if (result.message) {
+                    alert(result.message);
+                }
+            } catch (error) {
+                console.error('Suggestion error:', error);
+                alert('Error getting outfit suggestions: ' + error.message);
+            }
+        }
+
+        // Open wardrobe modal and fetch items from the back-end
+        async function openWardrobe() {
+            const modal = document.getElementById('wardrobeModal');
+            const wardrobeGrid = document.getElementById('wardrobeGrid');
+            wardrobeGrid.innerHTML = '';
+
+            try {
+                const response = await fetch('http://localhost:5000/api/wardrobe');
+                const items = await response.json();
+                if (!response.ok) {
+                    throw new Error(items.message || 'Failed to fetch wardrobe');
+                }
+
+                if (items.length === 0) {
+                    wardrobeGrid.innerHTML = '<p>No items in your wardrobe yet.</p>';
+                } else {
+                    items.forEach(item => {
+                        const itemDiv = document.createElement('div');
+                        itemDiv.className = 'wardrobe-item';
+                        itemDiv.innerHTML = `<img src="${item.image}" alt="${item.type}"><p>${item.type} (${item.brightness})</p>`;
+                        wardrobeGrid.appendChild(itemDiv);
+                    });
+                }
+            } catch (error) {
+                console.error('Wardrobe error:', error);
+                wardrobeGrid.innerHTML = `<p>Error loading wardrobe: ${error.message}</p>`;
+            }
+
+            modal.style.display = 'block';
+        }
+
+        // Close wardrobe modal
+        function closeWardrobe() {
+            document.getElementById('wardrobeModal').style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const wardrobeModal = document.getElementById('wardrobeModal');
+            if (event.target === wardrobeModal) {
+                closeWardrobe();
+            }
+        };
+    </script>
+</body>
+</html>
