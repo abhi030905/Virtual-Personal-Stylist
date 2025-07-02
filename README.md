@@ -46,7 +46,11 @@ The app will start at http://127.0.0.1:5000.
 Usage 📋:
 
 1.Open the website in your browser 🌐.
+
 2. Upload images of clothing items (e.g., shirt.jpg, pants.jpg) 📤.
+ 
 3. Select an occasion from the dropdown (Formal, Casual, Party) 🎯.
+   
 4. Click "Get Suggestion" to view the recommended outfit ✅.
+  
 5. The app will display detected items, missing items, and the suggested outfit 👕👖.
