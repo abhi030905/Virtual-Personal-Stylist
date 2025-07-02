@@ -45,7 +45,7 @@ The app will start at http://127.0.0.1:5000.
 
 Usage 📋:
 
- 1.Open the website in your browser 🌐.
+    1.Open the website in your browser 🌐.
 
 2. Upload images of clothing items (e.g., shirt.jpg, pants.jpg) 📤.
  
